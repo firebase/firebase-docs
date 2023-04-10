@@ -1,0 +1,36 @@
+name: pull-and-push-all
+run-name: ${{ github.actor }} is trying pull and push all
+on:
+  schedule:
+    - cron:  '*/30 * * * *' # you have to quote this string due to * being a special char
+  workflow_dispatch:
+
+
+jobs:
+  pull-flutter:
+    uses: firebase/firebase-docs/.github/workflows/pull-map-and-push-repo.yml@main
+    permissions:
+      contents: write
+    with:
+      target_source_repo: https://github.com/firebase/flutterfire.git
+      git_commit_user_email: firebase-oss-bot@ossbot.computer
+      git_commit_user_name: Firebase OSS Robot
+      git_commit_message_text: Pull and push of flutterfire/docs by ${{github.workflow}} run ${{github.run_number}}
+      copy_mapping_sources: flutterfire/docs
+      copy_mapping_destinations: flutter
+  pull-android-sdk:
+    uses: firebase/firebase-docs/.github/workflows/pull-map-and-push-repo.yml@main
+    needs: pull-flutter # NOTE: Forces serial
+    permissions:
+      contents: write
+    with:
+      target_source_repo: https://github.com/firebase/firebase-android-sdk.git
+      git_commit_user_email: firebase-oss-bot@ossbot.computer
+      git_commit_user_name: Firebase OSS Robot
+      git_commit_message_text: Pull and push of firebase-android-sdk/docs/ by ${{github.workflow}} run ${{github.run_number}}
+      copy_mapping_sources: firebase-android-sdk/docs
+      copy_mapping_destinations: android-sdk
+
+
+
+

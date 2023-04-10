@@ -1,0 +1,102 @@
+name: pull-map-and-push-repo
+run-name: ${{ github.actor }} is trying to pull, map and push ${{ inputs.target_source_repo }}
+on:
+  workflow_dispatch:
+    inputs:
+      target_source_repo:
+        type: string
+        description: 'Repo to copy in.'
+        default: 'https://github.com/firebase/flutterfire.git'
+        required: true
+      git_commit_user_email:
+        type: string
+        description: 'Commit user email.'
+        default: 'firebase-oss-bot@ossbot.computer'
+        required: true
+      git_commit_user_name:
+        type: string
+        description: 'Commit user name.'
+        default: 'Firebase OSS Robot'
+        required: true
+      git_commit_message_text:
+        type: string
+        description: 'Commit Message Text'
+        default: 'Pull and push of flutterfire/docs'
+        required: true
+      copy_mapping_sources:
+        type: string
+        description: 'Source Directories'
+        default: 'flutterfire/docs'
+        required: true
+      copy_mapping_destinations:
+        type: string
+        description: 'Destination Directories'
+        default: 'flutter'
+        required: true
+  workflow_call:
+    inputs:
+      target_source_repo:
+        type: string
+        description: 'Repo to copy in.'
+        default: 'https://github.com/firebase/flutterfire.git'
+        required: true
+      git_commit_user_email:
+        type: string
+        description: 'Commit user email.'
+        default: 'firebase-oss-bot@ossbot.computer'
+        required: true
+      git_commit_user_name:
+        type: string
+        description: 'Commit user name.'
+        default: 'Firebase OSS Robot'
+        required: true
+      git_commit_message_text:
+        type: string
+        description: 'Commit Message Text'
+        default: 'Pull and push of flutterfire/docs'
+        required: true
+      copy_mapping_sources:
+        type: string
+        description: 'Source Directories'
+        default: 'flutterfire/docs'
+        required: true
+      copy_mapping_destinations:
+        type: string
+        description: 'Destination Directories'
+        default: 'flutter'
+        required: true
+
+jobs:
+  checkout-pull-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: pull-external
+        run: |
+          mkdir temp-pull && cd temp-pull &&
+          git clone ${{inputs.target_source_repo}} && ls -r
+      - name: copy-target-to-new-location
+        run: |
+          sources_array=(${{inputs.copy_mapping_sources}}) && \
+          destinations_array=(${{inputs.copy_mapping_destinations}}) && \
+          echo ${#sources_array[@]} ${#destinations_array[@]} && \
+          [[(${#sources_array[@]} == ${#destinations_array[@]})]] && \
+          for (( i=0; i<${#sources_array[@]}; i++ )); do \
+            echo A:B ${sources_array[$i]}:${destinations_array[$i]} &&\
+            mkdir -p docs/${destinations_array[$i]} && \
+            cp -rf temp-pull/${sources_array[$i]}/. docs/${destinations_array[$i]}; \
+          done
+      - name: remove-temp-pull
+        run: rm -r temp-pull && git status --untracked-files
+      - name: git-commit
+        continue-on-error: true # A failure to commit means no changes.
+        run: |
+          git add . && git config user.email "${{inputs.git_commit_user_email}}" &&
+          git config user.name "${{inputs.git_commit_user_name}}" && git commit -m '${{inputs.git_commit_message_text}}' && git status
+      - uses: ad-m/github-push-action@master
+        continue-on-error: true # A failure to push means no changes.
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
