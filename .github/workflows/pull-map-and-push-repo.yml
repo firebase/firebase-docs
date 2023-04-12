@@ -79,24 +79,27 @@ jobs:
           git clone ${{inputs.target_source_repo}} && ls -r
       - name: copy-target-to-new-location
         run: |
-          sources_array=(${{inputs.copy_mapping_sources}}) && \
-          destinations_array=(${{inputs.copy_mapping_destinations}}) && \
-          echo ${#sources_array[@]} ${#destinations_array[@]} && \
-          [[(${#sources_array[@]} == ${#destinations_array[@]})]] && \
-          for (( i=0; i<${#sources_array[@]}; i++ )); do \
-            echo A:B ${sources_array[$i]}:${destinations_array[$i]} &&\
-            mkdir -p docs/${destinations_array[$i]} && \
-            cp -rf temp-pull/${sources_array[$i]}/. docs/${destinations_array[$i]}; \
+          sources_array=(${{inputs.copy_mapping_sources}})
+          destinations_array=(${{inputs.copy_mapping_destinations}})
+          echo ${#sources_array[@]} ${#destinations_array[@]}
+          if [ ${#sources_array[@]} != ${#destinations_array[@]} ]; then
+            echo 'sources_array and destinations_array must be the same length. Please fix.'
+            exit 1
+          fi
+          for (( i=0; i<${#sources_array[@]}; i++ ))
+          do
+            echo A:B ${sources_array[$i]}:${destinations_array[$i]}
+            mkdir -p docs/${destinations_array[$i]}
+            cp -rf temp-pull/${sources_array[$i]}/. docs/${destinations_array[$i]}
           done
       - name: remove-temp-pull
         run: rm -r temp-pull && git status --untracked-files
-      - name: git-commit
+      - name: git-commit-and-push
         continue-on-error: true # A failure to commit means no changes.
         run: |
-          git add . && git config user.email "${{inputs.git_commit_user_email}}" &&
-          git config user.name "${{inputs.git_commit_user_name}}" && git commit -m '${{inputs.git_commit_message_text}}' && git status
-      - uses: ad-m/github-push-action@master
-        continue-on-error: true # A failure to push means no changes.
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+          git add .
+          git config user.email "${{inputs.git_commit_user_email}}"
+          git config user.name "${{inputs.git_commit_user_name}}"
+          git commit -m '${{inputs.git_commit_message_text}}'
+          git status
+          git push
