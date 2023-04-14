@@ -95,8 +95,11 @@ jobs:
       - name: remove-temp-pull
         run: rm -r temp-pull && git status --untracked-files
       - name: git-commit-and-push
-        continue-on-error: true # A failure to commit means no changes.
         run: |
+          if [ -z "$(git status --porcelain)" ]; then 
+            echo 'No changes detected. Exiting.'
+            exit 0
+          fi
           git add .
           git config user.email "${{inputs.git_commit_user_email}}"
           git config user.name "${{inputs.git_commit_user_name}}"
