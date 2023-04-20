@@ -100,9 +100,11 @@ jobs:
             echo 'No changes detected. Exiting.'
             exit 0
           fi
+          echo 'Changes detected. Attempting to add, commit, pull --rebase and push.'
           git add .
           git config user.email "${{inputs.git_commit_user_email}}"
           git config user.name "${{inputs.git_commit_user_name}}"
           git commit -m '${{inputs.git_commit_message_text}}'
+          git pull --rebase
           git status
           git push
