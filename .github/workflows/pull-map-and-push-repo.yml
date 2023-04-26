@@ -76,7 +76,7 @@ jobs:
       - name: pull-external
         run: |
           mkdir temp-pull && cd temp-pull &&
-          git clone ${{inputs.target_source_repo}} && ls -r
+          git clone ${{inputs.target_source_repo}} --depth 1 && ls -r
       - name: copy-target-to-new-location
         run: |
           sources_array=(${{inputs.copy_mapping_sources}})
