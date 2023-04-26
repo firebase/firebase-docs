@@ -2,7 +2,7 @@ name: pull-and-push-all
 run-name: ${{ github.actor }} is trying pull and push all
 on:
   schedule:
-    - cron:  '*/30 * * * *' # you have to quote this string due to * being a special char
+    - cron:  '0 8 * * *' # every day at 8 AM UTC (midnight or 1:00 depending on DST)
   workflow_dispatch:
 
 
