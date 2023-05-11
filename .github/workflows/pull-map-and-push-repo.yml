@@ -31,7 +31,7 @@ on:
       copy_mapping_destinations:
         type: string
         description: 'Destination Directories'
-        default: 'flutter'
+        default: 'flutter/docs'
         required: true
   workflow_call:
     inputs:
@@ -63,7 +63,7 @@ on:
       copy_mapping_destinations:
         type: string
         description: 'Destination Directories'
-        default: 'flutter'
+        default: 'flutter/docs'
         required: true
 
 jobs:
