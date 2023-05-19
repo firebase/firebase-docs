@@ -31,7 +31,7 @@ on:
       copy_mapping_destinations:
         type: string
         description: 'Destination Directories'
-        default: 'flutter'
+        default: 'docs/flutter'
         required: true
   workflow_call:
     inputs:
@@ -63,7 +63,7 @@ on:
       copy_mapping_destinations:
         type: string
         description: 'Destination Directories'
-        default: 'flutter'
+        default: 'docs/flutter'
         required: true
 
 jobs:
@@ -89,8 +89,8 @@ jobs:
           for (( i=0; i<${#sources_array[@]}; i++ ))
           do
             echo A:B ${sources_array[$i]}:${destinations_array[$i]}
-            mkdir -p docs/${destinations_array[$i]}
-            cp -rf temp-pull/${sources_array[$i]}/. docs/${destinations_array[$i]}
+            mkdir -p ${destinations_array[$i]}
+            cp -rf temp-pull/${sources_array[$i]}/. ${destinations_array[$i]}
           done
       - name: remove-temp-pull
         run: rm -r temp-pull && git status --untracked-files

@@ -17,9 +17,5 @@ jobs:
       git_commit_user_name: Firebase OSS Robot
       git_commit_message_text: Pull and push of flutterfire/docs by ${{github.workflow}} run ${{github.run_number}}
       copy_mapping_sources: flutterfire/docs
-      copy_mapping_destinations: flutter
+      copy_mapping_destinations: docs/flutter
 # we can add other open source doc repos here/below
-
-
-
-
