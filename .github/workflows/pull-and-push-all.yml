@@ -74,18 +74,21 @@ jobs:
     name: send-update-notification
     runs-on: ubuntu-latest
     needs: [pull-flutter, pull-codelab-web-friendlychat, pull-codelab-web-friendlyeats, pull-codelab-android-friendlychat, pull-codelab-android-friendlyeats]
+
     steps:
       - name: Checkout Latest
         uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }} # Forces getting the latest instead of the default behaviour of the triggering SHA.
-
       - name: Print Diff
         shell: bash
         run: |
           if [ "${{ github.sha }}" = "$(git rev-parse HEAD)" ]; then
-              echo "Strings are equal."
+              echo "No changes."
           else
-              echo "Strings are not equal: Repo Updated"
+              echo "SHAs are not equal. Docs updated."
+              gh issue create --title "Docs Updated" --body "New changes pulled into monorepo."
           fi
           echo ${{ github.sha }} $(git rev-parse HEAD) $GITHUB_SHA 
+        env:
+          GH_TOKEN: ${{ secrets.FINE_GRAINED_TOKEN }}
