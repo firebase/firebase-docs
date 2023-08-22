@@ -17,7 +17,7 @@ jobs:
       git_commit_user_name: Firebase OSS Robot
       git_commit_message_text: Pull and push of flutterfire/docs by ${{github.workflow}} run ${{github.run_number}}
       copy_mapping_sources: flutterfire/docs
-      copy_mapping_destinations: docs/_flutter
+      copy_mapping_destinations: docs/flutter
       seconds_between_push_tries: 2
   # Web
   pull-codelab-web-friendlychat:
@@ -30,7 +30,7 @@ jobs:
       git_commit_user_name: Firebase OSS Robot
       git_commit_message_text: Pull and push of codelab-friendlychat-web/angularfire-start by ${{github.workflow}} run ${{github.run_number}}
       copy_mapping_sources: codelab-friendlychat-web/angularfire-start
-      copy_mapping_destinations: codelabs/_codelab-friendlychat-web/steps
+      copy_mapping_destinations: codelabs/codelab-friendlychat-web/steps
       seconds_between_push_tries: 3
   pull-codelab-web-friendlyeats:
     uses: firebase/firebase-docs/.github/workflows/pull-map-and-push-repo.yml@main
@@ -42,7 +42,7 @@ jobs:
       git_commit_user_name: Firebase OSS Robot
       git_commit_message_text: Pull and push of friendlyeats-web/vanilla-js/steps by ${{github.workflow}} run ${{github.run_number}}
       copy_mapping_sources: friendlyeats-web/vanilla-js/steps
-      copy_mapping_destinations: codelabs/_codelab-friendlyeats-web/vanilla-js/steps
+      copy_mapping_destinations: codelabs/codelab-friendlyeats-web/vanilla-js/steps
       seconds_between_push_tries: 4
 # Android
   pull-codelab-android-friendlychat:
@@ -55,7 +55,7 @@ jobs:
       git_commit_user_name: Firebase OSS Robot
       git_commit_message_text: Pull and push of codelab-friendlychat-android/steps by ${{github.workflow}} run ${{github.run_number}}
       copy_mapping_sources: codelab-friendlychat-android/steps
-      copy_mapping_destinations: codelabs/_codelab-friendlychat-android/steps
+      copy_mapping_destinations: codelabs/codelab-friendlychat-android/steps
       seconds_between_push_tries: 5
   pull-codelab-android-friendlyeats:
     uses: firebase/firebase-docs/.github/workflows/pull-map-and-push-repo.yml@main
@@ -67,7 +67,7 @@ jobs:
       git_commit_user_name: Firebase OSS Robot
       git_commit_message_text: Pull and push of friendlyeats-android/steps by ${{github.workflow}} run ${{github.run_number}}
       copy_mapping_sources: friendlyeats-android/steps
-      copy_mapping_destinations: codelabs/_codelab-friendlyeats-android/steps
+      copy_mapping_destinations: codelabs/codelab-friendlyeats-android/steps
       seconds_between_push_tries: 6
   # Finalize
   send-update-notification:

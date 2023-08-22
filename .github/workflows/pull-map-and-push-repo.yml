@@ -31,7 +31,7 @@ on:
       copy_mapping_destinations:
         type: string
         description: 'Destination Directories'
-        default: 'docs/_flutter'
+        default: 'docs/flutter'
         required: true
       seconds_between_push_tries:
         type: string
@@ -68,7 +68,7 @@ on:
       copy_mapping_destinations:
         type: string
         description: 'Destination Directories'
-        default: 'docs/_flutter'
+        default: 'docs/flutter'
         required: true
       seconds_between_push_tries:
         type: string
