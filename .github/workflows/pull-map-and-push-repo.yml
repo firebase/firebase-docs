@@ -25,13 +25,18 @@ on:
         required: true
       copy_mapping_sources:
         type: string
-        description: 'Source Directories'
+        description: 'Source Directories/Files'
         default: 'flutterfire/docs'
         required: true
       copy_mapping_destinations:
         type: string
         description: 'Destination Directories'
         default: 'docs/flutter'
+        required: true
+      seconds_between_push_tries:
+        type: string
+        description: 'How many seconds to sleep between push attempts.'
+        default: '2'
         required: true
   workflow_call:
     inputs:
@@ -57,13 +62,18 @@ on:
         required: true
       copy_mapping_sources:
         type: string
-        description: 'Source Directories'
+        description: 'Source Directories/Files'
         default: 'flutterfire/docs'
         required: true
       copy_mapping_destinations:
         type: string
         description: 'Destination Directories'
         default: 'docs/flutter'
+        required: true
+      seconds_between_push_tries:
+        type: string
+        description: 'How many seconds to sleep between push attempts.'
+        default: '2'
         required: true
 
 jobs:
@@ -90,7 +100,15 @@ jobs:
           do
             echo A:B ${sources_array[$i]}:${destinations_array[$i]}
             mkdir -p ${destinations_array[$i]}
-            cp -rf temp-pull/${sources_array[$i]}/. ${destinations_array[$i]}
+            # check if its a directoy, if so, do whats listed already, if not then
+            if [[ -d "temp-pull/${sources_array[$i]}" ]]
+            then
+                echo "temp-pull/${sources_array[$i]} is a DIRECTORY."
+                cp -rf temp-pull/${sources_array[$i]}/. ${destinations_array[$i]}
+            else
+                echo "temp-pull/${sources_array[$i]} is a FILE."
+                cp -rf temp-pull/${sources_array[$i]} ${destinations_array[$i]}
+            fi
           done
       - name: remove-temp-pull
         run: rm -r temp-pull && git status --untracked-files
@@ -105,6 +123,21 @@ jobs:
           git config user.email "${{inputs.git_commit_user_email}}"
           git config user.name "${{inputs.git_commit_user_name}}"
           git commit -m '${{inputs.git_commit_message_text}}'
-          git pull --rebase
-          git status
-          git push
+          let retries_remaining=5
+          let seconds_between_push_tries=${{inputs.seconds_between_push_tries}}
+          while [ $retries_remaining -gt 0 ]
+          do
+            git pull --rebase
+            git status
+            set +e # Turns off automatic fail on errored step behaviour.
+            git push
+            if [ $? -eq 0 ]; then
+                echo "Command succeeded"
+                retries_remaining=0
+            else
+              ((retries_remaining=retries_remaining-1))
+              echo "Retrying in $seconds_between_push_tries seconds."
+              sleep $seconds_between_push_tries
+            fi
+            set -e
+          done

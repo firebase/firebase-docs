@@ -4,7 +4,7 @@ on:
   schedule:
     - cron:  '0 8 * * *' # every day at 8 AM UTC (midnight or 1:00 depending on DST)
   workflow_dispatch:
-  
+
 
 jobs:
   pull-flutter:
@@ -18,4 +18,79 @@ jobs:
       git_commit_message_text: Pull and push of flutterfire/docs by ${{github.workflow}} run ${{github.run_number}}
       copy_mapping_sources: flutterfire/docs
       copy_mapping_destinations: docs/flutter
-# we can add other open source doc repos here/below
+      seconds_between_push_tries: 2
+  # Web
+  pull-codelab-web-friendlychat:
+    uses: firebase/firebase-docs/.github/workflows/pull-map-and-push-repo.yml@main
+    permissions:
+      contents: write
+    with:
+      target_source_repo: https://github.com/firebase/codelab-friendlychat-web.git
+      git_commit_user_email: firebase-oss-bot@ossbot.computer
+      git_commit_user_name: Firebase OSS Robot
+      git_commit_message_text: Pull and push of codelab-friendlychat-web/angularfire-start by ${{github.workflow}} run ${{github.run_number}}
+      copy_mapping_sources: codelab-friendlychat-web/angularfire-start
+      copy_mapping_destinations: codelabs/codelab-friendlychat-web/steps
+      seconds_between_push_tries: 3
+  pull-codelab-web-friendlyeats:
+    uses: firebase/firebase-docs/.github/workflows/pull-map-and-push-repo.yml@main
+    permissions:
+      contents: write
+    with:
+      target_source_repo: https://github.com/firebase/friendlyeats-web.git
+      git_commit_user_email: firebase-oss-bot@ossbot.computer
+      git_commit_user_name: Firebase OSS Robot
+      git_commit_message_text: Pull and push of friendlyeats-web/vanilla-js/steps by ${{github.workflow}} run ${{github.run_number}}
+      copy_mapping_sources: friendlyeats-web/vanilla-js/steps
+      copy_mapping_destinations: codelabs/codelab-friendlyeats-web/vanilla-js/steps
+      seconds_between_push_tries: 4
+# Android
+  pull-codelab-android-friendlychat:
+    uses: firebase/firebase-docs/.github/workflows/pull-map-and-push-repo.yml@main
+    permissions:
+      contents: write
+    with:
+      target_source_repo: https://github.com/firebase/codelab-friendlychat-android.git
+      git_commit_user_email: firebase-oss-bot@ossbot.computer
+      git_commit_user_name: Firebase OSS Robot
+      git_commit_message_text: Pull and push of codelab-friendlychat-android/steps by ${{github.workflow}} run ${{github.run_number}}
+      copy_mapping_sources: codelab-friendlychat-android/steps
+      copy_mapping_destinations: codelabs/codelab-friendlychat-android/steps
+      seconds_between_push_tries: 5
+  pull-codelab-android-friendlyeats:
+    uses: firebase/firebase-docs/.github/workflows/pull-map-and-push-repo.yml@main
+    permissions:
+      contents: write
+    with:
+      target_source_repo: https://github.com/firebase/friendlyeats-android.git
+      git_commit_user_email: firebase-oss-bot@ossbot.computer
+      git_commit_user_name: Firebase OSS Robot
+      git_commit_message_text: Pull and push of friendlyeats-android/steps by ${{github.workflow}} run ${{github.run_number}}
+      copy_mapping_sources: friendlyeats-android/steps
+      copy_mapping_destinations: codelabs/codelab-friendlyeats-android/steps
+      seconds_between_push_tries: 6
+  # Finalize
+  send-update-notification:
+    name: send-update-notification
+    runs-on: ubuntu-latest
+    needs: [pull-flutter, pull-codelab-web-friendlychat, pull-codelab-web-friendlyeats, pull-codelab-android-friendlychat, pull-codelab-android-friendlyeats]
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - name: Checkout Latest
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }} # Forces getting the latest instead of the default behaviour of the triggering SHA.
+      - name: Print Diff
+        shell: bash
+        run: |
+          if [ "${{ github.sha }}" = "$(git rev-parse HEAD)" ]; then
+              echo "No changes."
+          else
+              echo "SHAs are not equal. Docs updated."
+              gh issue create --title "Docs Updated" --body "New changes pulled into monorepo."
+          fi
+          echo ${{ github.sha }} $(git rev-parse HEAD) $GITHUB_SHA 
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
