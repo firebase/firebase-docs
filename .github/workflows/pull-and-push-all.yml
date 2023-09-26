@@ -89,7 +89,7 @@ jobs:
               echo "No changes."
           else
               echo "SHAs are not equal. Docs updated."
-              gh issue create --title "Docs Updated" --body "New changes pulled into monorepo."
+              gh issue create --title "Docs Updated" --body "New changes pulled into monorepo." --assignee "joefspiro" --label "type: process" --label "priority: p3"
           fi
           echo ${{ github.sha }} $(git rev-parse HEAD) $GITHUB_SHA 
         env:
