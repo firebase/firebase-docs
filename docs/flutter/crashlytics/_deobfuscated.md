@@ -69,9 +69,9 @@ If this run script does _not_ exist, you can add it manually:
     These scripts process your dSYM files and upload the files to
     {{crashlytics}}.
 
-    <pre class="devsite-click-to-copy">$PODS_ROOT/FirebaseCrashlytics/upload-symbols --build-phase --validate -ai <var>FIREBASE_APP_ID</var> -- $DWARF_DSYM_FOLDER_PATH/App.framework.dSYM</pre>
+    <pre class="devsite-click-to-copy">"$PODS_ROOT/FirebaseCrashlytics/upload-symbols" --build-phase --validate -ai "<var>FIREBASE_APP_ID</var>" -- "$DWARF_DSYM_FOLDER_PATH/$DWARF_DSYM_FILE_NAME"</pre>
 
-    <pre class="devsite-click-to-copy">$PODS_ROOT/FirebaseCrashlytics/upload-symbols --build-phase -ai <var>FIREBASE_APP_ID</var> -- $DWARF_DSYM_FOLDER_PATH/App.framework.dSYM </pre>
+    <pre class="devsite-click-to-copy">"$PODS_ROOT/FirebaseCrashlytics/upload-symbols" --build-phase -ai "<var>FIREBASE_APP_ID</var>" -- "$DWARF_DSYM_FOLDER_PATH/$DWARF_DSYM_FILE_NAME"</pre>
 
     * <var>FIREBASE_APP_ID</var>: Your Firebase Apple App ID (not your
       Apple bundle ID)<br>
@@ -95,15 +95,15 @@ If this run script does _not_ exist, you can add it manually:
 1.  In the _Input Files_ section, add the paths for the locations of the
     following files:
 
-    <pre class="devsite-click-to-copy">${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}</pre>
+    <pre class="devsite-click-to-copy">"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}"</pre>
 
-    <pre class="devsite-click-to-copy">${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}</pre>
+    <pre class="devsite-click-to-copy">"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}"</pre>
 
-    <pre class="devsite-click-to-copy">${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist</pre>
+    <pre class="devsite-click-to-copy">"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist"</pre>
 
-    <pre class="devsite-click-to-copy">$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist</pre>
+    <pre class="devsite-click-to-copy">"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist"</pre>
 
-    <pre class="devsite-click-to-copy">$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)</pre>
+    <pre class="devsite-click-to-copy">"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)"</pre>
 
     <section class="expandable">
       <p class="showalways"><b>Understand why the locations of these files are
