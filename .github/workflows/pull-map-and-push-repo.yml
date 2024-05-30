@@ -100,7 +100,7 @@ jobs:
           do
             echo A:B ${sources_array[$i]}:${destinations_array[$i]}
             mkdir -p ${destinations_array[$i]}
-            # check if its a directoy, if so, do whats listed already, if not then
+            # check if its a directory, if so, do whats listed already, if not then
             if [[ -d "temp-pull/${sources_array[$i]}" ]]
             then
                 echo "temp-pull/${sources_array[$i]} is a DIRECTORY."
