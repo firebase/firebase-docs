@@ -548,7 +548,7 @@ service cloud.firestore {
 >
 > **Warning**: the rules above are extremely insecure! Never deploy a real Firebase app without writing custom security rules.
 
-Let's change these rules to prevent unwanted data acesss or changes, open the `firestore.rules` file and replace the content with the following:
+Let's change these rules to prevent unwanted data access or changes, open the `firestore.rules` file and replace the content with the following:
 
 ```
 rules_version = '2';
