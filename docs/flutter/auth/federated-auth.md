@@ -138,8 +138,13 @@ with the Facebook App ID and Secret set.
     // Trigger the sign-in flow
     final LoginResult loginResult = await FacebookAuth.instance.login();
 
+    // If the login wasn't successful, the accessToken will be null.
+    if (loginResult.accessToken == null) {
+      return Future.error("Error signing into Facebook: ${loginResult.message}");
+    }
+
     // Create a credential from the access token
-    final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken.token);
+    final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.tokenString);
 
     // Once signed in, return the UserCredential
     return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
