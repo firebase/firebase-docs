@@ -49,7 +49,7 @@ Code                             | Description
 `storage/quota-exceeded`         | Quota on your Cloud Storage bucket has been exceeded. If you're on the no-cost tier, upgrade to a paid plan. If you're on a paid plan, reach out to Firebase support.
 `storage/unauthenticated`        | User is unauthenticated, please authenticate and try again.
 `storage/unauthorized`           | User is not authorized to perform the desired action, check your security rules to ensure they are correct.
-`storage/retry-limit-exceeded`   | The maximum time limit on an operation (upload, download, delete, etc.) has been excceded. Try uploading again.
+`storage/retry-limit-exceeded`   | The maximum time limit on an operation (upload, download, delete, etc.) has been exceeded. Try uploading again.
 `storage/invalid-checksum`       | File on the client does not match the checksum of the file received by the server. Try uploading again.
 `storage/canceled`               | User canceled the operation.
 `storage/invalid-event-name`     | Invalid event name provided. Must be one of [`running`, `progress`, `pause`]

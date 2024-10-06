@@ -63,7 +63,7 @@ temporary changes to this quota from the
 ## Sign in a user with an email address and password
 
 The steps for signing in a user with a password are similar to the steps for
-creating a new account. From your your app's sign-in screen, call
+creating a new account. From your app's sign-in screen, call
 `signInWithEmailAndPassword()`:
 
 ```dart

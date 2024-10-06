@@ -69,7 +69,7 @@ Using your IDE, open or import the 📁 `angularfire-start` directory from the c
 
 > aside positive
 >
-> **Important**: After you have cloned or downloaded the code from the respository, access the 📁 `angularfire-start` directory in your console, and run `npm install` to install dependencies.
+> **Important**: After you have cloned or downloaded the code from the repository, access the 📁 `angularfire-start` directory in your console, and run `npm install` to install dependencies.
 
 ## Create and set up a Firebase project
 Duration: 05:00
@@ -304,7 +304,7 @@ export const environment = {
 
 #### **Import AngularFire**
 
-You will find that featues you've selected in the console were automatically routed in the `/angularfire-start/src/app/app.module.ts` file. This allows your app to use Firebase features and functionalities. However, to develop in a local environment, you need to connect them to use the Emulator suite.
+You will find that features you've selected in the console were automatically routed in the `/angularfire-start/src/app/app.module.ts` file. This allows your app to use Firebase features and functionalities. However, to develop in a local environment, you need to connect them to use the Emulator suite.
 
 1. In `/angularfire-start/src/app/app.module.ts`, find the `imports` section, and modify the provide functions to connect to Emulator suite in non-production environments.
 
